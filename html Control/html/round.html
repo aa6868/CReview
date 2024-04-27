@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="utf-8">
+   <title>審評回合</title>
+   <link type="text/css" href="../asset/css/id.css" rel="stylesheet">
+
+</head>
+
+    <body>
+    <form>
+        <div class="container">
+            <h1>主題回合</h1>
+            <button type="button" id="button" class="cbtn">登出</button>
+        </div>
+
+        <div class="button-container">
+            <button type="button" id="button0">練習</button>
+        </div>
+        <br><br>
+        
+        <div class="button-container">  
+            <button type="button" id="button1">課程主題</button>
+        </div>
+        
+
+        <!-- <div class="button-container">
+            <button type="button" id="button2">主題2</button>
+        </div> -->
+        <!-- <br><br>
+
+        <div class="button-container">
+            <button type="button" id="button3">第三回合</button>
+        </div> -->
+        
+
+        
+    </form>
+
+    <script type="module">
+
+      import { onAuthStateChanged, signOut  } from 'https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js'
+      import { collection, getDocs, doc } from 'https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js';
+      import { db, auth } from '../js/DB.js';
+
+      
+
+      async function getUsers(db) {
+         const citiesCol = collection(db, 'users');
+         const citySnapshot = await getDocs(citiesCol);
+         const cityList = citySnapshot.docs.map(doc => {
+            return doc;
+         });
+         return cityList;
+      }
+
+      onAuthStateChanged(auth, currentUser => {
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        }
+      });
+
+        const button = document.getElementById("button");
+        const button0 = document.getElementById("button0");
+        const button1 = document.getElementById("button1");
+        // const button2 = document.getElementById("button2");
+        // const button3 = document.getElementById("button3");
+
+        button.addEventListener("click", () => {
+            signOut(auth).then(() => {
+              // 用户已成功登出，重定向至登录页面
+              window.location.href = 'login.html';
+          }).catch((error) => {
+              // 处理登出过程中的错误
+              console.error('登出时发生错误：', error);
+          });
+        });
+
+
+        button0.addEventListener("click", () => {
+            onAuthStateChanged(auth, async currentUser => {
+                if (currentUser) {
+                    if (currentUser.email === "admin@gmail.com") {
+                        window.location.href = `id_page.html?round=Round0`;
+                    }else{
+                        window.location.href = `original_page.html?round=Round0`;
+                    }
+                }
+            });
+        });
+
+        // button1.addEventListener("click", () => {
+        //     window.location.href = `id_page.html?round=Round1`;
+        // });
+        button1.addEventListener("click", () => {
+            onAuthStateChanged(auth, async currentUser => {
+                if (currentUser) {
+                    if (currentUser.email === "admin@gmail.com") { 
+                        window.location.href = `id_page.html?round=Round1`;
+                    }else{
+                        window.location.href = `author_page.html?round=Round1`;
+                    }
+                }
+            });
+        });
+            
+        
+        // button2.addEventListener("click", () => {
+            
+        //     window.location.href = `author_page.html?round=Round2`;
+        // });
+        // button3.addEventListener("click", () => {
+            
+        //     window.location.href = `author_page.html?round=Round3`;
+        // });
+        // button3.addEventListener("click", () => {
+            
+        //     window.location.href = `id_page.html?round=Round3`;
+        // });
+
+
+    </script>
+    </body>
+</html>

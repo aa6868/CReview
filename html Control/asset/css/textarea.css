@@ -1,0 +1,185 @@
+.content,.content1,.content2 {
+    background: url("../../images/numbers.png");
+    background-attachment: local;
+    background-repeat: no-repeat;
+    background-size: 30.8px;
+    padding-left: 35px;
+    border-radius: 25px;
+    padding-top: 12px;
+    border-color:#ccc;
+}
+
+table {
+  width: 800px;
+  height: 500px;
+  border: 2px solid #000; /* 將表格邊框設置為2px寬，黑色 */
+  border-collapse: collapse; /* 合併表格邊框，使其看起來更加緊湊 */
+}
+
+th, td {
+  border: 2px solid #000; /* 將單元格邊框設置為2px寬，黑色 */
+  padding: 10px; /* 添加內邊距，使內容更加美觀 */
+}
+
+
+p.indent {
+    text-indent: 20px;
+  }
+
+.progress {
+display: flex;
+justify-content: space-between;
+}
+
+.step {
+flex: 1;
+text-align: center;
+padding: 10px;
+background-color: #9c9c9c;
+color: #0c0a09;
+}
+
+.step.active {
+background-color: #007bff;
+}
+  
+.imbtn{
+  width: 330px;
+  text-align: left;  /* 内文靠左对齐 */
+  background-color: rgb(245, 245, 140);  /* 底色为灰色 */
+}
+
+.imbtn:hover {
+  background-color: rgb(128, 141, 253); /* 滑鼠懸停時的背景顏色 */
+}
+
+.advice3 div.even .imbtn {
+  background-color: rgb(245, 245, 160);
+}
+
+.advice3 div.odd .imbtn {
+  background-color: rgb(250, 230, 200);
+}
+
+.feedback{
+  width: 255px;
+}
+
+.advice3 .advice-group {
+  
+  background-color: rgb(245, 245, 140); /* 設定每一組資料的背景顏色 */
+  padding: 10px; /* 設定每一組資料的內邊距 */
+}
+
+
+.advice3 .order {
+  color: rgb(78, 78, 253); /* 設定順序文字的顏色 */
+  font-weight: bold; /* 設定順序文字的粗體 */
+}
+
+.advice .advice-group {
+  padding: 10px; /* 設定每一組資料的內邊距 */
+}
+
+.advice-group:nth-child(odd) {
+  background-color: rgb(245, 245, 160);
+}
+.advice-group:nth-child(even) {
+  background-color: rgb(250, 230, 200);
+}
+
+.helpbtn{
+  background-image: url("../../images/help.png");
+  padding: 12px 12px;
+  background-color: aliceblue;
+  background-position: center;
+  background-size: contain;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  margin-left: auto;
+  display: inline-block; /* 設置為內聯塊元素 */
+  vertical-align: middle; /* 垂直置中對齊文本 */
+  position: relative; /* 啟用相對定位 */
+}
+
+strong {
+  display: inline-block; /* 設置為內聯塊元素 */
+  text-align: center; /* 文字水平居中 */
+  vertical-align: middle; /* 垂直置中對齊圖標 */
+}
+
+.modal-content1 {
+  background-color: #f4f4f4;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 970px;
+  height: 350px;
+  background-image: url("../../images/任務完成度.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.modal-content2 {
+  background-color: #f4f4f4;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 970px;
+  height: 350px;
+  background-image: url("../../images/組織結構.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.modal-content3 {
+  background-color: #f4f4f4;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 970px;
+  height: 350px;
+  background-image: url("../../images/詞彙使用.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.modal-content4 {
+  background-color: #f4f4f4;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 970px;
+  height: 350px;
+  background-image: url("../../images/語言使用.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.advice p {
+  white-space: pre-line;
+}
+
+.advice2 div {
+  padding: 10px; /* 設定每一組資料的內邊距 */
+}
+.advice2 div:nth-child(odd) {
+  background-color: rgb(245, 245, 160); 
+}
+.advice2 div:nth-child(even) {
+  background-color: rgb(250, 230, 200); 
+}
+
+.diff {
+  color: red;
+}
+
+#text1 p {
+  margin: 0;
+}
+

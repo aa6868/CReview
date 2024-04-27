@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="utf-8">
+   <title>自我審評</title>
+   <link type="text/css" href="../asset/css/login.css" rel="stylesheet">
+</head>
+
+<body>
+   <form>
+   <div class="container">
+      <h1>自我審評</h1>
+         <button type="button" id="button" class="cbtn">上一步</button>
+   </div>
+
+      <label for="field0"></label>
+      <button type="button" id="button7">文章查看</button>
+      <br><br>
+      <div class="button-container">
+      <label for="field1"></label>
+      <button type="button" id="button8" >自我審評</button>
+      <button type="button" id="button9" disabled>文章修訂</button>
+      </div>
+      <br>
+      <label for="field2"></label>
+      <button type="button" id="button10" disabled>結論</button>
+      <p id="remind"></p>
+   </form>
+
+
+
+   <script type="module">
+
+
+      import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js'
+      import { collection, getDocs } from 'https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js';
+      import { db, auth } from '../js/DB.js';
+
+
+      async function getUsers(db) {
+         const citiesCol = collection(db, 'users');
+         const citySnapshot = await getDocs(citiesCol);
+         const cityList = citySnapshot.docs.map(doc => {
+            return doc;
+
+         });
+         return cityList;
+      }
+
+
+      //抓取當前ID
+      function getCurrentUserIdx(users, currentUser) {
+         let idx = -1;
+         users.forEach((user, index) => {
+
+            if (user.id === currentUser.uid) {
+               idx = index;
+               localStorage.setItem('uid', currentUser.uid);
+            }
+         })
+         return idx;
+      }
+
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const round = urlParams.get('round');
+
+
+      onAuthStateChanged(auth, async currentUser => {
+         if (currentUser) {
+            const users = await getUsers(db);
+            const currentUserIdx = getCurrentUserIdx(users, currentUser);
+
+            const p_remind = document.querySelector("#remind");
+            const button = document.getElementById("button");
+            const button7 = document.getElementById("button7");
+            const button8 = document.getElementById("button8");
+            const button9 = document.getElementById("button9");
+            const button10 = document.getElementById("button10");
+
+            async function getRound(id, round) {
+               const user = await getDocs(collection(db, "users", id, round));
+               let ret;
+               const list = user.forEach(doc => {
+                  ret = doc.data();
+               })
+               return ret;
+            }
+
+            const currentUserId = await getRound(users[currentUserIdx].id, round);
+            
+            
+            if (currentUserId.rated && currentUserId.rated.length >= 1) {
+               button8.disabled = true;
+               button9.disabled = false;
+            }else{
+               p_remind.textContent = "你的文章尚未被審畢，故無法修改!";
+            }
+            
+            if (currentUserId.fixedText && currentUserId.fixedText.length >= 1) {
+               button9.disabled = true;
+               button10.disabled = false;
+            }
+            
+            // if (currentUserId.liked && currentUserId.liked.length >= 2) {
+            //    button10.disabled = false;
+            // }
+
+            button.addEventListener("click", () => {
+               window.location.href = `round.html`;
+            });
+            button7.addEventListener("click", () => {
+               window.location.href = `original_page.html?round=${round}`;
+            });
+            button8.addEventListener("click", () => {
+               window.location.href = `first_rater.html?user=${users[currentUserIdx].id}&round=${round}`;
+            });
+            button9.addEventListener("click", () => {
+               window.location.href = `revise_page.html?user=${users[currentUserIdx].id}&round=${round}`;
+            });
+            button10.addEventListener("click", () => {
+               window.location.href = `curfinally_page.html?user=${users[currentUserIdx].id}&round=${round}`;
+            });
+         }
+         
+      });
+
+      
+      
+
+
+   </script>
+
+</body>
+
+</html>

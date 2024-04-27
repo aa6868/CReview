@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Local審評</title>
+    <link type="text/css" href="../asset/css/base.css" rel="stylesheet" />
+    <link type="text/css" href="../asset/css/textarea.css" rel="stylesheet" />
+  </head>
+  <body>
+    <script>
+      function toggleImage() {
+        var img = document.getElementById("nm");
+        if (img.style.display === "none") {
+          img.style.display = "block";
+        } else {
+          img.style.display = "none";
+        }
+      }
+    </script>
+    
+    <br />
+    
+    <div class="progress">
+      <div class="step active">local審評</div>
+      <div class="step">global審評</div>
+      <div class="step">文章修訂</div>
+    </div>
+
+    <div align="center">
+      <label><h3>Local審評</h3></label>
+      <button onclick="toggleImage()">圖片</button>
+      <!-- <button id="openModal">排錯工具</button> -->
+
+      <div id="myModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <form id="m_form">
+            <span  for="option" id="fd">請框選內文範圍</span >
+            <br />
+            <textarea placeholder="輸入錯誤位置(第N行)" class = "rows" maxlength="5" ></textarea>
+            <br />
+            <input class="error" type="checkbox" id="option1" name="option" value="單字錯誤" />
+            <label for="option1">單字錯誤</label>
+            <br />
+            <input class="error" type="checkbox" id="option2" name="option" value="單複數錯誤" />
+            <label for="option2">單複數錯誤</label>
+            <br />
+            <input class="error" type="checkbox" id="option3" name="option" value="時態錯誤" />
+            <label for="option3">時態錯誤</label>
+            <br />
+            <input class="error" type="checkbox" id="option4" name="option" value="標點符號錯誤" />
+            <label for="option4">標點符號錯誤</label>
+            <br />
+            <input class="error" type="checkbox" id="option5" name="option" value="主詞動詞不一致" />
+            <label for="option4">主詞動詞不一致</label>
+            <br />
+            <input class="error" type="checkbox" id="option6" name="option" value="詞類錯誤" />
+            <label for="option6">詞類錯誤</label>
+            <br />
+            <input class="error" type="checkbox" id="option6" name="option" value="其他錯誤" />
+            <label for="option5">其他錯誤</label>
+            <br />
+            <label for="comment">Comment:</label>
+            <br />
+            <textarea id="comment" name="comment" rows="4" cols="20"></textarea>
+            <br />
+            <input
+              id="form_submit"
+              type="button"
+              value="送出"
+            />
+          </form>
+        </div>
+      </div>
+      <br />
+      <img id="nm" height="auto" width="300px" />
+      <br />
+      <table width="800" border="1">
+        <tbody>
+          <tr>
+            <td>
+              <label><strong>➤寫作者文章</strong></label>
+              <textarea
+                class="content"
+                readonly
+				        placeholder="請輸入您的寫作內容…"
+                name="mTA"
+                cols="30"
+                rows="20"
+                id="mTA"
+                style="height: 650px; width: 800px"
+                type="text"
+              ></textarea>
+            </td>
+            <td valign="top" style="overflow-y: auto;">
+              <!-- <textarea
+              disabled
+                name="textarea"
+                cols="30"
+                rows="20"
+                style="height: 500px; width: 300px"
+                type="text"
+              ></textarea> -->
+              <div class="advice" ></div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p></p>
+      <div style="position: relative; top: 10px">
+        <!-- <button id="select" onclick="changeColor()">選取</button> -->
+        <button id="done">下一步</button>
+      </div>
+    </div>
+
+
+    <script type="module" >
+      var modal = document.getElementById("myModal");
+      // var btn = document.getElementById("openModal");
+      var close = document.getElementsByClassName("close")[0];
+
+      // btn.onclick = function () {
+      //   modal.style.display = "block";       
+      // };
+
+      close.onclick = function () {
+        modal.style.display = "none";
+      };
+
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      };
+      
+
+      let advices = [];
+
+      window.addEventListener('load', () => {
+        const storedAdvices = localStorage.getItem('advices');
+        if (storedAdvices) {
+          advices = JSON.parse(storedAdvices);
+          displayAdvices();
+        }
+      });
+
+      function displayAdvices() {
+        const adviceDiv = document.querySelector('.advice');
+        adviceDiv.innerHTML = ''; // 清空原有的显示内容
+
+        advices.forEach((advice, index) => {
+          const pWord = document.createElement('p');
+          pWord.textContent = '●' + advice.selection;
+
+          const pRow = document.createElement('p');
+          pRow.textContent ='錯誤位置 : 第' + advice.row + '行';
+
+          const pErrors = document.createElement('p');
+          pErrors.innerHTML =  '錯誤類型 :\n\t &nbsp;&nbsp;&nbsp;•'+ advice.selectedErrors.join('\n\t&nbsp;&nbsp;&nbsp;•');
+          const pAnswer = document.createElement('p');
+          pAnswer.textContent = 'Comment: ' + advice.answer;
+
+          const deleteButton = document.createElement('button');
+          deleteButton.textContent = 'x';
+          deleteButton.addEventListener('click', () => {
+            advices.splice(index, 1);
+            displayAdvices();
+            // local storage
+            localStorage.removeItem('advices');
+            localStorage.setItem('advices', JSON.stringify(advices));
+          });
+
+        adviceDiv.appendChild(pWord);
+        adviceDiv.appendChild(pRow);
+        adviceDiv.appendChild(pErrors);
+        adviceDiv.appendChild(pAnswer);
+        adviceDiv.appendChild(deleteButton);
+
+        });
+      }
+
+      const textarea = document.querySelector('.rows');
+      textarea.addEventListener('input', function() {
+        const inputValue = this.value.trim(); // 取得輸入值並移除前後空白
+
+        // 檢查輸入值是否為數字
+        if (!/^\d*$/.test(inputValue)) {
+          this.value = ''; // 清空輸入框
+          alert('僅輸入位置行數數字！'); // 顯示錯誤訊息
+        }
+        });
+
+      function onSubmit() {
+        const word = document.querySelector("#fd");
+        const row = document.querySelector(".rows");
+        const errors = document.querySelectorAll(".error");
+        const answer = document.querySelector("#comment");
+        const selectedErrors = Array.from(errors).filter(error => error.checked);
+
+        // add to advices
+        const selectedErrorValues = selectedErrors.map(error => {
+          return error.value;
+        });
+        // advices.push({ selection: word.textContent, selectedErrors: selectedErrorValues, answer: answer.value });
+
+        const adviceDiv = document.querySelector(".advice");
+        const pWord = document.createElement('p');
+        const pRow = document.createElement('p');
+        const pErrors = document.createElement('p');
+        const pAnswer = document.createElement('p');
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'x';
+        deleteButton.addEventListener('click', () => {
+          adviceDiv.removeChild(pWord);
+          adviceDiv.removeChild(pRow);
+          adviceDiv.removeChild(pErrors);
+          adviceDiv.removeChild(pAnswer);
+          adviceDiv.removeChild(deleteButton);
+        });
+
+        pWord.textContent ='●' + word.textContent;
+        pRow.textContent ='錯誤行 :' + row.value;
+        selectedErrors.forEach(error => {
+          pErrors.textContent +=  '•' + error.value + ' ';
+        });
+        pAnswer.textContent =  'Comment :' + ' ' + answer.value;
+
+        adviceDiv.appendChild(pWord);
+        adviceDiv.appendChild(pRow);
+        adviceDiv.appendChild(pErrors);
+        adviceDiv.appendChild(pAnswer);
+        adviceDiv.appendChild(deleteButton);
+
+        // 将新的建议添加到advices数组中
+        advices.push({ selection: word.textContent, row:row.value, selectedErrors: selectedErrorValues, answer: answer.value });
+
+        // 将advices数组存储到本地
+        localStorage.setItem('advices', JSON.stringify(advices));
+
+        // 显示建议
+        displayAdvices();
+
+        // close window
+        modal.style.display = "none";
+        console.log(advices);
+      }
+      const formSubmit = document.querySelector("#form_submit");
+      formSubmit.addEventListener('click', onSubmit);
+      //
+
+      import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js'
+      import { getDoc, doc, collection, setDoc, addDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js';
+      import { db, auth } from '../js/DB.js';
+
+
+      async function getUser(db, userId) {
+            const userSnapshot =doc(collection(db, 'users', userId, round), userId);
+            const documentSnapshot = await getDoc(userSnapshot);
+            if(documentSnapshot.exists()) {
+              return documentSnapshot.data();
+            }
+            return null;
+      }
+
+      function getSelectedText() {
+        let txt;
+        if (window.getSelection) {
+            txt = window.getSelection();
+        } else if (window.document.getSelection) {
+            txt =window.document.getSelection();
+        } else if (window.document.selection) {
+            txt = window.document.selection.createRange().text;
+        }
+        document.getElementById("fd").textContent  = txt;
+        
+      }
+      
+      
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const userId = urlParams.get('user');
+      const round = urlParams.get('round');
+      const user = await getUser(db, userId);
+
+      const content = document.querySelector('#mTA');
+      content.innerHTML = user.text;
+
+      //mouseup
+      content.addEventListener('mouseup', () => {
+        getSelectedText();
+        handleMouseUp();
+      });
+
+      function handleMouseUp() {
+        const selection = window.getSelection();
+        const selectedText = selection.toString();
+        const adviceDiv = document.querySelector('.advice');
+        
+        if (selectedText.trim() !== '') {         
+          showModal();
+        }
+      }
+
+      function showModal() {
+        const modal = document.getElementById('myModal');
+        
+        //每次點擊清空輸入
+        document.querySelector("#fd").value = "";
+        document.querySelector(".rows").value = "";
+        document.querySelectorAll(".error").forEach(error => error.checked = false);
+        document.querySelector("#comment").value = "";
+
+        modal.style.display = "block";
+      }
+      
+
+      const img = document.querySelector('#nm');
+      img.src = user.photo;
+
+      
+      const done = document.querySelector('#done');
+      done.addEventListener("click", () => {
+          
+        let rated = [];
+
+        onAuthStateChanged(auth, async currentUser => {
+          if (currentUser) {
+            console.log(currentUser.uid);
+            if (user.advices1) {
+              if (user.advices1.some(advice => advice.userId === currentUser.uid)) {
+                // 更新 advices1 中對應的 currentUser.uid 和 advices
+                const updatedAdvices1 = user.advices1.map(advice => {
+                  if (advice.userId === currentUser.uid) {
+                    return {
+                      userId: currentUser.uid,
+                      advices: advices,
+                    };
+                  }
+                  return advice;
+                });
+
+                updateDoc(doc(db, "users", userId, round, userId), {
+                  advices1: updatedAdvices1
+                }).then(() => {
+                  window.location.href = `second_rater.html?user=${userId}&round=${round}`;
+                });
+              } else {
+                // 創建 advices2 並存儲 currentUser.uid 和 advices
+                const newAdvice = {
+                  userId: currentUser.uid,
+                  advices: advices,
+                };
+
+                updateDoc(doc(db, "users", userId, round, userId), {
+                  advices2: [newAdvice]
+                }).then(() => {
+                  window.location.href = `second_rater.html?user=${userId}&round=${round}`;
+                });
+              }
+            } else {
+              // 創建 advices1 並存儲 currentUser.uid 和 advices
+              const newAdvice = {
+                userId: currentUser.uid,
+                advices: advices,
+              };
+
+              updateDoc(doc(db, "users", userId, round, userId), {
+                advices1: [newAdvice]
+              }).then(() => {
+                window.location.href = `second_rater.html?user=${userId}&round=${round}`;
+              });
+            }
+          }
+        });
+        
+      });
+
+
+    </script>
+  </body>
+</html>

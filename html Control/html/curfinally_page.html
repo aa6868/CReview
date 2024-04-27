@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>finally_page</title>
+  <link type="text/css" href="../asset/css/second_rater.css" rel="stylesheet">
+  <link type="text/css" href="../asset/css/textarea.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsdiff/5.1.0/diff.min.js"></script>
+</head>
+
+<body>
+  
+ <br>
+
+  <div class="progress">
+    <div class="step">文章修訂</div>
+    <div class="step active">結論</div>
+  </div>
+
+  <div align="center">
+    <label>
+      <h3>結論</h3>
+    </label>
+    <button onclick="toggleImage()">圖片</button><br>
+    <img id="nm" height="auto" width="300px"><br>
+    <script>
+      function toggleImage() {
+        var img = document.getElementById("nm");
+        if (img.style.display === "none") {
+          img.style.display = "block";
+        } else {
+          img.style.display = "none";
+        }
+      }
+    </script>
+
+    <table width="800" height="500" border="1">
+      <tbody>
+        <tr>
+          <td valign="top" id = "later" width="500" height="470" rowspan="3">
+            
+            <label><strong>➤寫作者文章</strong></label>
+            <button id = "later1">修訂後內文</button>
+            <button id = "later2">改動內容</button>
+            <span id ="hint1"  style="color: #C63300; font-size: 20px;">●</span>
+            <span id ="hint2"  style="color: black; font-size: 14px;">刪減掉文字</span>
+            <span id ="hint3"  style="color: #00AA00; font-size: 20px;">●</span>
+            <span id ="hint4"  style="color: black; font-size: 14px;">新添加文字</span>
+
+            <form  method="post">  
+              <textarea readonly id="text1" class="content" 
+                style="height:650px;width:800px;"></textarea>
+            </form>
+            <form  method="post">
+              <div id="text2"   
+                style="height:650px;width:800px; border: 2px solid rgb(56, 56, 56); border-radius: 25px; padding: 15px;"></div>
+            </form>
+            
+          </td>
+          <td valign="top" id="myCell" style="overflow-y: auto;">
+            <button type="button" id="areaButton">區域內容</button>
+            <button type="button" id="globalButton">全域內容</button>
+          </td>
+          
+
+          <!-- <td valign="top" style="overflow: auto;" rowspan="2">
+            <form id="form4" name="form4">
+              <label><strong>➤寫作者反饋</strong></label>
+              <div class="advice2" id="fbs"></div>
+            </form>
+          </td> -->
+        </tr>
+        <tr>
+          <td valign="top">
+            <form id="form2" name="form2" method="post">
+              <label><strong></strong></label>
+              <div class="advice" style="overflow-y: auto;"></div>
+            </form>
+
+            <form id="form3">
+              <label><strong></strong></label>
+              <div class="advice3" style="overflow-y: auto;"></div>
+            </form>
+          </td>
+
+
+        </tr>
+      </tbody>
+    </table>
+
+
+
+    <br>
+    <div style="position:relative;top:10px;">
+      <button id="done">上一頁</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js'
+    import { getDoc, doc, updateDoc, collection } from 'https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js';
+    import { db, auth } from '../js/DB.js';
+
+    async function getUser(db, userId) {
+            const userSnapshot =doc(collection(db, 'users', userId, round), userId);
+
+            const documentSnapshot = await getDoc(userSnapshot);
+            if(documentSnapshot.exists()) {
+              return documentSnapshot.data();
+            }
+            return null;
+      }
+
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const userId = urlParams.get('user')
+    const round = urlParams.get('round');
+    const user = await getUser(db, userId);
+    const content1_1 = document.querySelector('#text1');
+    // const fixedText = user.fixedText;
+    content1_1.value = user.fixedText;
+    content1_1.style.fontSize = '16px';
+    
+    // const paragraphs = fixedText.split('\n');
+
+    // paragraphs.forEach((paragraph) => {
+    //   if (paragraph.trim() === '') { // 如果是空白行
+    //     const emptyParagraph = document.createElement('p');
+    //     emptyParagraph.textContent = '\u00A0'; // 使用 Unicode 空白字符
+    //     content1_1.appendChild(emptyParagraph);
+    //   } else {
+    //     const p = document.createElement('p');
+    //     p.textContent = paragraph;
+    //     content1_1.appendChild(p);
+    //   }
+    // });
+
+    const content1_2 = document.querySelector('#text2');
+    const original_text = user.text;
+    const fixed_text = user.fixedText;
+    const diff = Diff.diffChars(original_text, fixed_text);
+
+    diff.forEach((part) => {
+      // console.log(part);
+      const color = part.added ? '#00AA00' : part.removed ? '#C63300' : 'black';
+      const span = document.createElement('span');
+      span.style.color = color;
+      span.innerHTML = part.value.replace(/\n/g, "<br>");
+      content1_2.appendChild(span);
+      content1_2.style.fontSize = '16px';
+      
+    });
+    content1_2.style.wordWrap = 'break-word';
+
+    const later1 = document.getElementById('later1');
+    const later2 = document.getElementById('later2');
+    const content1 = document.getElementById('text1');
+    const content2 = document.getElementById('text2');
+    const hint1 = document.getElementById('hint1');
+    const hint2 = document.getElementById('hint2');
+    const hint3 = document.getElementById('hint3');
+    const hint4 = document.getElementById('hint4');
+
+    hint1.style.display = 'none';
+    hint2.style.display = 'none';
+    hint3.style.display = 'none';
+    hint4.style.display = 'none';
+    content1.style.display = 'block';
+    content2.style.display = 'none';
+      
+    later1.addEventListener('click', () => {
+      hint1.style.display = 'none';
+      hint2.style.display = 'none';
+      hint3.style.display = 'none';
+      hint4.style.display = 'none';
+      content1.style.display = 'block';
+      content2.style.display = 'none';
+    });
+
+    later2.addEventListener('click', () => {
+      hint1.style.display = 'inline';
+      hint2.style.display = 'inline';
+      hint3.style.display = 'inline';
+      hint4.style.display = 'inline';
+      content1.style.display = 'none';
+      content2.style.display = 'block';
+    });
+
+    const img = document.querySelector('#nm');
+    img.src = user.photo;
+
+
+    const adviceDiv = document.querySelector(".advice");
+    user.advices1.forEach((advice1) => {
+          advice1.advices.forEach((advice) => {
+            const adviceGroup = document.createElement('div');
+            adviceGroup.classList.add('advice-group'); 
+
+            const pWord = document.createElement('p');
+            const pRow = document.createElement('p');
+            const pErrors = document.createElement('p');
+            const pAnswer = document.createElement('p');
+
+            pWord.textContent = '●' + advice.selection;
+            pRow.textContent = '錯誤位置 : 第' + advice.row + '行';
+            // advice.selectedErrors.forEach(error => {
+            //   pErrors.textContent += '•'  + error + ' ';
+            // });
+            pErrors.innerHTML =  '錯誤類型 :\n\t &nbsp;&nbsp;&nbsp;•'+ advice.selectedErrors.join('\n\t&nbsp;&nbsp;&nbsp;•');
+            pAnswer.textContent = 'Comment:' + ' ' + advice.answer;
+            
+
+            adviceGroup.appendChild(pWord);
+            adviceGroup.appendChild(pRow);
+            adviceGroup.appendChild(pErrors);
+            adviceGroup.appendChild(pAnswer);
+
+            adviceDiv.appendChild(adviceGroup);
+          });
+        });
+        // user.advices2.forEach((advice2) => {
+        //   advice2.advices.forEach((advice) => {
+        //     const adviceGroup = document.createElement('div');
+        //     adviceGroup.classList.add('advice-group'); 
+
+        //     const pWord = document.createElement('p');
+        //     const pRow = document.createElement('p');
+        //     const pErrors = document.createElement('p');
+        //     const pAnswer = document.createElement('p');
+
+        //     pWord.textContent = '●' + advice.selection;
+        //     pRow.textContent = '錯誤位置 : 第' + advice.row + '行';
+        //     // advice.selectedErrors.forEach(error => {
+        //     //   pErrors.textContent += '•'  + error + ' ';
+        //     // });
+        //     pErrors.innerHTML =  '錯誤類型 :\n\t &nbsp;&nbsp;&nbsp;•'+ advice.selectedErrors.join('\n\t&nbsp;&nbsp;&nbsp;•');
+        //     pAnswer.textContent = 'Comment:' + ' ' + advice.answer;
+            
+
+        //     adviceGroup.appendChild(pWord);
+        //     adviceGroup.appendChild(pRow);
+        //     adviceGroup.appendChild(pErrors);
+        //     adviceGroup.appendChild(pAnswer);
+
+        //     adviceDiv.appendChild(adviceGroup);
+        //   });
+        // });
+
+        const global = document.querySelector('.advice3');
+        global.innerHTML = "";
+
+        const globalAdvices = user.globalAdvices; // 取得 globalAdvices 陣列
+
+        const adviceIndices = [4, 5, 6, 7, 8]; // 要顯示的資料索引
+
+        adviceIndices.forEach((index, i) => {
+    let advice;
+    if (index === 4) {
+        // 若索引為 0，將資料與 globalAdvices[4] 的資料合併
+        advice = `[${globalAdvices[0]}分] \n ${globalAdvices[4]}`;
+    } else if (index === 5) {
+        advice = `[${globalAdvices[1]}分] \n ${globalAdvices[5]}`;
+    } else if (index === 6) {
+        advice = `[${globalAdvices[2]}分] \n ${globalAdvices[6]}`;
+    } else if (index === 7) {
+        advice = `[${globalAdvices[3]}分] \n ${globalAdvices[7]}`;
+    } else {
+        advice = globalAdvices[index];
+    }
+
+    // 計算順序
+    const order = i + 1;
+
+    // 創建 <div> 元素，用於包裹每一組資料
+    const adviceGroup = document.createElement('div');
+    adviceGroup.classList.add('advice-group');
+
+    // 創建 <p> 元素，顯示順序
+    const orderDisplay = document.createElement('p');
+    orderDisplay.innerHTML = `第 ${order} 點`;
+    orderDisplay.classList.add('order');
+    adviceGroup.appendChild(orderDisplay);
+
+    // 將資料以換行符號分割成多行
+    const lines = advice.split('\n');
+    // 創建 <p> 元素，顯示資料的每一行
+    lines.forEach(line => {
+        const adviceDisplay = document.createElement('p');
+        adviceDisplay.textContent = line;
+        adviceGroup.appendChild(adviceDisplay);
+        adviceDisplay.style.wordWrap = 'break-word';
+    });
+
+    // 將 adviceGroup 添加到 global 中
+    global.appendChild(adviceGroup);
+});
+
+    //縮合
+    const areaButton = document.getElementById('areaButton');
+    const globalButton = document.getElementById('globalButton');
+    const areaContent = document.querySelector('#form2 .advice');
+    const globalContent = document.getElementById('form3').querySelector('.advice3');
+
+    areaContent.style.display = 'block'; // 顯示區域內容
+    globalContent.style.display = 'none'; // 隱藏全域內容
+
+    areaButton.addEventListener('click', () => {
+      areaContent.style.display = 'block';
+      globalContent.style.display = 'none';
+    });
+
+    globalButton.addEventListener('click', () => {
+      areaContent.style.display = 'none';
+      globalContent.style.display = 'block';
+    });
+
+    // // feedback
+    // const writerfb = document.querySelector('.advice2');
+
+    // if (user.feedbacks) {
+    //   user.feedbacks.forEach((feedback, index) => {
+      //   if (feedback.value.trim() !== "") {
+      //     let like = 0;
+      //     let dislike = 0;
+      //     let len = user.likes.length;
+
+      //     if (user.likes[index] === 1) {
+      //       like += 1;
+      //     } else {
+      //       dislike += 1;
+      //     }
+
+      //     if (user.likes[index + len / 2] === 1) {
+      //       like += 1;
+      //     } else {
+      //       dislike += 1;
+      //     }
+
+    //       const div = document.createElement('div');
+    //       const pFeedback = document.createElement('p');
+    //       // const like_btn = document.createElement('button');
+    //       // const dislike_btn = document.createElement('button');
+    //       pFeedback.innerHTML = "第" + (feedback.index + 1) + "點反饋 :<br> &nbsp;&nbsp;&nbsp;&nbsp;" + feedback.value;
+
+          
+    //       // like_btn.textContent = `like: ${like}`;
+    //       // dislike_btn.textContent = `dislike: ${dislike}`;
+    //       // like_btn.disabled = true;
+    //       // dislike_btn.disabled = true;
+
+    //       div.appendChild(pFeedback);
+    //       // div.appendChild(like_btn);
+    //       // div.appendChild(dislike_btn);
+    //       writerfb.appendChild(div);
+    //     // }
+    //   });
+    // }
+
+    // done
+    const done = document.querySelector('#done');
+    done.addEventListener('click', () => {
+      onAuthStateChanged(auth, async currentUser => {
+        if (currentUser) {
+              if (currentUser.email === "admin@gmail.com") { 
+                window.location.href = `id_page.html?round=${round}`;
+              }else{
+                window.location.href = `author_page.html?round=${round}`;
+              }
+        }
+      });
+    });
+
+  </script>
+</body>
+
+</html>

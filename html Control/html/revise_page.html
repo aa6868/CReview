@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>文章修訂</title>
+  <link type="text/css" href="../asset/css/second_rater.css" rel="stylesheet">
+  <link type="text/css" href="../asset/css/textarea.css" rel="stylesheet" />
+</head>
+
+<body>
+<br>
+
+  <div class="progress">
+    <div class="step active">文章修訂</div>
+    <div class="step">結論</div>
+  </div>
+
+  <div align="center">
+    <label>
+      <h3>文章修訂</h3>
+    </label>
+    <button onclick="toggleImage()">圖片</button><br>
+    <img id="nm" height="auto" width="300px"><br>
+    <script>
+      function toggleImage() {
+        var img = document.getElementById("nm");
+        if (img.style.display === "none") {
+          img.style.display = "block";
+        } else {
+          img.style.display = "none";
+        }
+      }
+    </script>
+    <table width="800" height="500" border="1">
+      <tbody>
+        
+        <tr>
+          <td valign="top" width="500" height="470" rowspan="3">
+            <form id="form1" name="form1" method="post">
+              <label><strong>➤寫作者文章</strong></label>
+              <textarea class="content" name="textarea" id="textarea" style="height:650px;width:800px;" ></textarea>
+            </form>
+          </td>
+        
+          <td width="300" height="50">
+            <div valign="top" id="myCell">
+            <button type="button" id="areaButton">區域內容</button>
+            <button type="button" id="globalButton">全域內容</button> 
+            </div>
+          </td>
+        <tr>
+          
+          <td valign="top" style="overflow: auto;">         
+            <div id="form2" name="form2" method="post">
+              <label><strong></strong></label>
+              <div class="advice" ></div>  
+            </div>
+                              
+            <div id="form3" style="overflow: auto;">
+              <label><strong></strong></label>
+              <div class="advice3"></div>
+            </div>
+            
+          </td>
+        
+          <!-- <td valign="top" style="overflow: auto;">
+            <form id="form4" name="form4">
+              <label><strong>➤寫作者反饋</strong></label>
+              <button id="add-feedback">+</button>
+              <div class="advice2" id="fbs" ></div> -->
+              <!-- <textarea placeholder="請輸入評分內容" name="textarea4" id="textarea4" rows="2" cols="31"></textarea> -->
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <div style="position:relative;top:10px;">
+      <button id="done">提交</button>
+    </div>
+  </div>
+
+ 
+  <script type="module">
+    import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js'
+    import { collection, getDoc, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js';
+    import { db, auth } from '../js/DB.js';
+
+    async function getUser(db, userId) {
+            const userSnapshot =doc(collection(db, 'users', userId, round), userId);
+            const documentSnapshot = await getDoc(userSnapshot);
+            if(documentSnapshot.exists()) {
+              return documentSnapshot.data();
+            }
+            return null;
+      }
+
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const round = urlParams.get('round');
+
+    onAuthStateChanged(auth, async currentUser => {
+      if (currentUser) {
+        const user = await getUser(db, currentUser.uid);
+        // update content
+        const content = document.querySelector('#textarea');
+        content.value = user.text;
+        // update local advices
+
+        const adviceDiv = document.querySelector(".advice");
+        user.advices1.forEach((advice1) => {
+          advice1.advices.forEach((advice) => {
+            const adviceGroup = document.createElement('div');
+            adviceGroup.classList.add('advice-group'); 
+
+            const pWord = document.createElement('p');
+            const pRow = document.createElement('p');
+            const pErrors = document.createElement('p');
+            const pAnswer = document.createElement('p');
+
+            pWord.textContent = '●' + advice.selection;
+            pRow.textContent = '錯誤位置 : 第' + advice.row + '行';
+            // advice.selectedErrors.forEach(error => {
+            //   pErrors.textContent += '•'  + error + ' ';
+            // });
+            pErrors.innerHTML =  '錯誤類型 :\n\t &nbsp;&nbsp;&nbsp;•'+ advice.selectedErrors.join('\n\t&nbsp;&nbsp;&nbsp;•');
+            pAnswer.textContent = 'Comment:' + ' ' + advice.answer;
+            
+
+            adviceGroup.appendChild(pWord);
+            adviceGroup.appendChild(pRow);
+            adviceGroup.appendChild(pErrors);
+            adviceGroup.appendChild(pAnswer);
+
+            adviceDiv.appendChild(adviceGroup);
+          });
+        });
+        // user.advices2.forEach((advice2) => {
+        //   advice2.advices.forEach((advice) => {
+        //     const adviceGroup = document.createElement('div');
+        //     adviceGroup.classList.add('advice-group'); 
+
+        //     const pWord = document.createElement('p');
+        //     const pRow = document.createElement('p');
+        //     const pErrors = document.createElement('p');
+        //     const pAnswer = document.createElement('p');
+
+        //     pWord.textContent = '●' + advice.selection;
+        //     pRow.textContent = '錯誤位置 : 第' + advice.row + '行';
+        //     // advice.selectedErrors.forEach(error => {
+        //     //   pErrors.textContent += '•'  + error + ' ';
+        //     // });
+        //     pErrors.innerHTML =  '錯誤類型 :\n\t &nbsp;&nbsp;&nbsp;•'+ advice.selectedErrors.join('\n\t&nbsp;&nbsp;&nbsp;•');
+        //     pAnswer.textContent = 'Comment:' + ' ' + advice.answer;
+            
+
+        //     adviceGroup.appendChild(pWord);
+        //     adviceGroup.appendChild(pRow);
+        //     adviceGroup.appendChild(pErrors);
+        //     adviceGroup.appendChild(pAnswer);
+
+        //     adviceDiv.appendChild(adviceGroup);
+        //   });
+        // });
+        
+        
+
+        // update global advice
+        
+        const global = document.querySelector('.advice3');
+        const advices = [
+        " [" + user.globalAdvices[0] + "分] \n" + user.globalAdvices[4],
+        " [" + user.globalAdvices[1] + "分] \n" + user.globalAdvices[5],
+        " [" + user.globalAdvices[2] + "分] \n" + user.globalAdvices[6],
+        " [" + user.globalAdvices[3] + "分] \n" + user.globalAdvices[7],
+        user.globalAdvices[8],
+        // " [" + user.globalAdvices[9] + "] " + user.globalAdvices[13],
+        // " [" + user.globalAdvices[10] + "] " + user.globalAdvices[14],
+        // " [" + user.globalAdvices[11] + "] " + user.globalAdvices[15],
+        // " [" + user.globalAdvices[12] + "] " + user.globalAdvices[16],
+        // user.globalAdvices[17]
+        ];
+
+        for (let i = 0; i < advices.length; i++) {
+          const div = document.createElement('div');
+          const button = document.createElement('button');
+          const adviceWithLineBreaks = advices[i].replace(/\n/g, '<br>'); // 將換行符號轉換為HTML換行標籤
+          button.innerHTML = adviceWithLineBreaks; // 使用innerHTML以解析HTML標籤
+          button.classList.add('imbtn');
+          button.classList.add('ellipsis'); 
+          button.style.color = 'black';
+          button.style.whiteSpace = 'pre-line'; 
+          if (i % 2 === 0) {
+            div.classList.add('even');
+          } else {
+            div.classList.add('odd');
+          }
+          global.appendChild(div);
+          div.appendChild(button);
+          global.appendChild(document.createElement('br'));
+          // const textarea = document.createElement('textarea');
+          // textarea.classList.add('feedback');
+          // const deleteButton = document.createElement('button');
+          // deleteButton.textContent = 'X';
+          // deleteButton.classList.add('delete-button');
+          // div.appendChild(textarea);
+          // div.appendChild(deleteButton);
+          // textarea.style.display = "none";
+          // deleteButton.style.display = "none";
+          // deleteButton.addEventListener('click', () => {
+          //   textarea.value = '';
+          //   textarea.style.display = "none";
+          //   deleteButton.style.display = "none";
+          // });
+
+          // button.addEventListener('click', () => {
+          //   textarea.style.display = "inline-block";
+          //   deleteButton.style.display = "inline-block";
+          // });
+        }
+      
+
+        const img = document.querySelector('#nm');
+        img.src = user.photo;
+
+
+        //縮合
+        const areaButton = document.getElementById('areaButton');
+        const globalButton = document.getElementById('globalButton');
+        const areaContent = document.querySelector('#form2 .advice');
+        const globalContent = document.getElementById('form3').querySelector('.advice3');
+
+        areaContent.style.display = 'block'; // 顯示區域內容
+        globalContent.style.display = 'none'; // 隱藏全域內容
+        
+        areaButton.addEventListener('click', () => {
+          areaContent.style.display = 'block';
+          globalContent.style.display = 'none';
+        });
+
+        globalButton.addEventListener('click', () => {
+          areaContent.style.display = 'none';
+          globalContent.style.display = 'block';
+        });
+
+        // done
+        const done = document.querySelector('#done');
+        done.addEventListener('click', () => {
+          // let feedbacks = [];
+          // const feedbackAreas = document.querySelectorAll('.feedback');
+          // feedbackAreas.forEach((area, index) => {
+          //   feedbacks.push({value: area.value, index: index});
+          // })
+
+          const confirmSubmission = confirm('確定要繳交嗎？');
+
+          if (confirmSubmission) {
+            updateDoc(doc(db, 'users', currentUser.uid, round, currentUser.uid), {
+              fixedText: content.value,
+              // feedbacks: feedbacks.filter(feedback => feedback.value.trim().length > 0)
+            }).then(() => {
+              // jump
+              window.location.href = `author_page.html?round=${round}`;
+            });
+          }
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>

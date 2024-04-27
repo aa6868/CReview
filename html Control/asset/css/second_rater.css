@@ -1,0 +1,143 @@
+button {
+	background-color: #5379f7;
+    color: white;
+    padding: 12px 20px;
+    border: 1.5px solid #000000;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+    background-color: #001aff;
+    border: 1.5px solid #000000;
+}
+
+button#done{
+	background-color: #ff0000;
+    color: white;
+    padding: 12px 20px;
+    border: 1.5px solid #000000;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加陰影效果，以獲得立體感 */
+}
+
+#done:hover {
+    background-color: #9b0505;
+    border: 1.5px solid #000000;
+}
+
+button#add-feedback {
+    background-color: #007bff;
+    border: none;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.ellipsis {
+    white-space: normal; /* 允許文字換行 */
+    word-wrap: break-word; /* 在必要時換行 */
+    overflow-wrap: break-word;
+}
+          
+body{
+    background-color: rgb(216, 218, 240);
+    font-family: "Microsoft JhengHei";
+}
+
+table {
+    background-color: aliceblue;
+}
+
+img {
+        display: none;
+      }
+textarea {
+        font-size: 16px;
+        resize: none;
+      }
+table, tr{
+ border:1;
+}
+
+html { box-sizing: border-box; }
+*, *::before, *::after { box-sizing: inherit; }
+
+body {
+    padding: 20px 0;
+}
+
+h1, h2 {
+    margin: 0;
+    padding: 34px 0 14px 40px;
+}
+
+nav > ul {
+    background-color: rgb(230, 230, 230);
+    list-style: none;   /* 移除項目符號 */
+    margin: 0;
+    padding: 0;
+}
+
+nav a {
+    color: inherit; /* 移除超連結顏色 */
+    display: block; /* 讓 <a> 填滿 <li> */
+    font-size: 1.2rem;
+    padding: 10px;
+    text-decoration: none;  /* 移除超連結底線 */
+}
+
+/* 滑鼠移到 <a> 時變成深底淺色 */
+nav li:hover {
+    background-color: rgb(115, 115, 115);
+    color: white;
+}
+
+.flex-nav {
+    display: flex;
+    justify-content: center;
+}
+
+.inline-block-nav {
+    text-align: center;
+    font-size: 0;   /* 移除 <li> 之間的空隙 */
+}
+
+.inline-block-nav > li {
+    display: inline-block;
+}
+
+.advice, .advice2, .advice3 {
+    width: 350px;
+    height: 650px;
+}
+
+#myCell {
+    display: flex;
+    justify-content: space-around;
+    
+}
+
+#later1, #later2{    
+    height: 45px;
+}
+
+.content {
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+  
+
+
+  
+  
+  

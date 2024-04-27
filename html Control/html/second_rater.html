@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Global審評</title>
+	<link type="text/css" href="../asset/css/base.css" rel="stylesheet">
+	<link type="text/css" href="../asset/css/textarea.css" rel="stylesheet">
+</head>
+
+<body>
+	
+	<br>
+
+	<div class="progress">
+		<div class="step"><a href="#" id="one">local審閱</a></div>
+		<div class="step active">global審評</div>
+		<div class="step">寫作➤初稿修訂</div>
+
+	</div>
+	<div align="center">
+		<label>
+			<h3>Global審評</h3>
+		</label>
+		<button onclick="toggleImage()">圖片</button>
+		<!-- <button id="select">標記工具</button> -->
+		<br>
+		<img id="nm" height="auto" width="300px">
+		<br>
+		<script>
+			function toggleImage() {
+				var img = document.getElementById("nm");
+				if (img.style.display === "none") {
+					img.style.display = "block";
+				} else {
+					img.style.display = "none";
+				}
+			}
+		</script>
+		<table width="800" height="500" border="2">
+			<tbody>
+				<tr>
+					<td rowspan="2" width="500" height="500">
+						<form id="form1" name="form1" method="post">
+							<label><strong>➤寫作者文章</strong></label>
+							<textarea readonly class="content" name="textarea" id="mTA"
+								style="height:650px;width:800px;"></textarea>
+						</form>
+					</td>
+					
+					<td align="center" >
+						<div class = "GraupTable" style="overflow-y: auto; ">					
+								<label>
+								  <strong>1. 任務完成度</strong>
+								</label>
+								<button class="helpbtn" id="help1"></button>
+								<div id="myModal1" class="modal">
+									<div class="modal-content1">
+									  <span class="close1">&times;</span>
+									</div>
+								</div>
+							<br>
+							<label>
+								<input type="radio" name="RadioGroup1" value="1" id="RadioGroup1_0">
+								1分</label>
+							<label>
+								<input type="radio" name="RadioGroup1" value="2" id="RadioGroup1_1">
+								2分</label>
+							<label>
+								<input type="radio" name="RadioGroup1" value="3" id="RadioGroup1_2">
+								3分</label>
+							<label>
+								<input type="radio" name="RadioGroup1" value="4" id="RadioGroup1_3">
+								4分</label>
+							<label>
+								<input type="radio" name="RadioGroup1" value="5" id="RadioGroup1_4">
+								5分</label>
+							<br>
+							<form id="form4" method="post">
+								<textarea placeholder="給分因素 (E.g.:內容與場景是否足夠對應、內容體現是否清晰、內容是否蓋圖片關鍵特徵)" id="textarea3_1"
+									style="height:100px;width:300px;"></textarea>
+							</form>
+							<label>
+								<strong>2. 組織結構</strong>
+							</label>
+							<button class = "helpbtn" id = "help2"></button>
+							<div id="myModal2" class="modal">
+								<div class="modal-content2">
+								  <span class="close2">&times;</span>
+								</div>
+							</div>
+							<br>
+							<label>
+								<input type="radio" name="RadioGroup2" value="1" id="RadioGroup2_0">
+								1分</label>
+							<label>
+								<input type="radio" name="RadioGroup2" value="2" id="RadioGroup2_1">
+								2分</label>
+							<label>
+								<input type="radio" name="RadioGroup2" value="3" id="RadioGroup2_2">
+								3分</label>
+							<label>
+								<input type="radio" name="RadioGroup2" value="4" id="RadioGroup2_3">
+								4分</label>
+							<label>
+								<input type="radio" name="RadioGroup2" value="5" id="RadioGroup2_4">
+								5分</label>
+							<br>
+							<form id="form5" method="post">
+								<textarea placeholder="給分因素 (E.g.:是否有邏輯的組織觀點或分段、銜接方式是否準確)" id="textarea3_2"
+									style="height:100px;width:300px;"></textarea>
+							</form>
+
+							<label>
+								<strong>3. 詞彙使用</strong>
+							</label>
+							<button class = "helpbtn" id = "help3"></button>
+							<div id="myModal3" class="modal">
+								<div class="modal-content3">
+								  <span class="close3">&times;</span>
+								</div>
+							</div>
+							<br>
+							<label>
+								<input type="radio" name="RadioGroup3" value="1" id="RadioGroup3_0">
+								1分</label>
+							<label>
+								<input type="radio" name="RadioGroup3" value="2" id="RadioGroup3_1">
+								2分</label>
+							<label>
+								<input type="radio" name="RadioGroup3" value="3" id="RadioGroup3_2">
+								3分</label>
+							<label>
+								<input type="radio" name="RadioGroup3" value="4" id="RadioGroup3_3">
+								4分</label>
+							<label>
+								<input type="radio" name="RadioGroup3" value="5" id="RadioGroup3_4">
+								5分</label>
+							<br>
+							<form id="form6" method="post">
+								<textarea placeholder="給分因素 (E.g.:詞彙重複度是否不高、單辭拼寫正確度)" id="textarea3_3"
+									style="height:100px;width:300px;"></textarea>
+							</form>
+
+							<label>
+								<strong>4. 語言使用</strong>
+							</label>
+							<button class = "helpbtn" id = "help4"></button>
+							<div id="myModal4" class="modal">
+								<div class="modal-content4">
+								  <span class="close4">&times;</span>
+								</div>
+							</div>
+							<br>
+							<label>
+								<input type="radio" name="RadioGroup4" value="1" id="RadioGroup4_0">
+								1分</label>
+							<label>
+								<input type="radio" name="RadioGroup4" value="2" id="RadioGroup4_1">
+								2分</label>
+							<label>
+								<input type="radio" name="RadioGroup4" value="3" id="RadioGroup4_2">
+								3分</label>
+							<label>
+								<input type="radio" name="RadioGroup4" value="4" id="RadioGroup4_3">
+								4分</label>
+							<label>
+								<input type="radio" name="RadioGroup4" value="5" id="RadioGroup4_4">
+								5分</label>
+							<br>
+							<form id="form7" method="post">
+								<textarea placeholder="給分因素 (E.g.:使用的語法複雜度、語法及標點符號正確度)" id="textarea3_4"
+									style="height:100px;width:300px;"></textarea>
+							</form>
+							<label>
+								<strong>綜合評論:</strong>
+							</label>
+							<br>
+							<form id="form3" name="form3" method="post">
+								<textarea placeholder="建議內容" name="textarea3" id="textarea3_5"
+									style="height:200px;width:300px;"></textarea>
+							</form>
+						</div>
+						
+					</td>
+			</tbody>
+		</table>
+		<br>
+		<div style="position:relative;top:10px;">
+			<button id="done1">上一步</button>
+			<button id="done">提交</button>
+		</div>
+	</div>
+
+	<script type="module">
+		import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js'
+		import { getDoc, doc, updateDoc, collection} from 'https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js';
+		import { db, auth } from '../js/DB.js';
+
+
+		async function getUser(db, userId) {
+            const userSnapshot =doc(collection(db, 'users', userId, round), userId);
+            const documentSnapshot = await getDoc(userSnapshot);
+            if(documentSnapshot.exists()) {
+              return documentSnapshot.data();
+            }
+            return null;
+      }
+		// feedback
+		let feedbacks = [];
+
+		function addFeedback(e) {
+			e.preventDefault();
+			feedbacks.push("");
+			renderFeedbacks();
+		}
+
+		function renderFeedbacks() {
+			const fbForm = document.querySelector("#fbs");
+			fbForm.innerHTML = '';
+			feedbacks.forEach((feedback, index) => {
+				const fb = document.createElement('input');
+				const btn = document.createElement('button');
+				fb.classList.add("feedback");
+				btn.textContent = 'x';
+				btn.addEventListener('click', () => {
+					feedbacks.splice(index, 1);
+					renderFeedbacks();
+				})
+				fbForm.appendChild(fb);
+				fbForm.appendChild(btn);
+			});
+		}
+
+		var helpbtn1 = document.getElementById("help1");
+		var helpbtn2 = document.getElementById("help2");
+		var helpbtn3 = document.getElementById("help3");
+		var helpbtn4 = document.getElementById("help4");
+		var modal1 = document.getElementById("myModal1");
+		var modal2 = document.getElementById("myModal2");
+		var modal3 = document.getElementById("myModal3");
+		var modal4 = document.getElementById("myModal4");
+
+      
+		var close1 = document.getElementsByClassName("close1")[0];
+		var close2 = document.getElementsByClassName("close2")[0];
+		var close3 = document.getElementsByClassName("close3")[0];
+		var close4 = document.getElementsByClassName("close4")[0];
+
+
+		helpbtn1.onclick = function () {
+			modal1.style.display = "block";       
+		};
+		helpbtn2.onclick = function () {
+			modal2.style.display = "block";       
+		};
+		helpbtn3.onclick = function () {
+			modal3.style.display = "block";       
+		};
+		helpbtn4.onclick = function () {
+			modal4.style.display = "block";       
+		};
+
+		close1.onclick = function () {
+			modal1.style.display = "none";
+		};
+		close2.onclick = function () {
+			modal2.style.display = "none";
+		};
+		close3.onclick = function () {
+			modal3.style.display = "none";
+		};
+		close4.onclick = function () {
+			modal4.style.display = "none";
+		};
+
+		
+
+
+		window.onclick = function (event) {
+			if (event.target == modal1) {
+			modal1.style.display = "none";
+			}
+			if (event.target == modal2) {
+			modal2.style.display = "none";
+			}
+			if (event.target == modal3) {
+			modal3.style.display = "none";
+			}
+			if (event.target == modal4) {
+			modal4.style.display = "none";
+			}
+		};
+
+
+		//存localStorage
+		function saveDataToLocal() {
+		const table = document.querySelector('.GraupTable');
+		const inputs = table.querySelectorAll('input[type="radio"]:checked');
+		const textareas = table.querySelectorAll('textarea');
+		const data = [];
+
+		inputs.forEach(input => {
+			data.push(input.value);
+		});
+
+		textareas.forEach(textarea => {
+			data.push(textarea.value);
+		});
+
+		localStorage.setItem('GraupTableData', JSON.stringify(data));
+		}
+		//
+
+		const queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
+		const userId = urlParams.get('user');
+		const round = urlParams.get('round');
+		const user = await getUser(db, userId);
+
+		const content = document.querySelector('#mTA');
+		content.innerHTML = user.text;
+		
+		const one_btn = document.querySelector('#one');
+		one_btn.addEventListener("click", () => {
+			saveDataToLocal();
+			window.location.href = `first_rater.html?user=${userId}&round=${round}`;
+		});
+		const img = document.querySelector('#nm');
+		img.src = user.photo;
+
+		const done1 = document.querySelector('#done1');
+		done1.addEventListener("click", () => {
+			saveDataToLocal();
+			window.location.href = `first_rater.html?user=${userId}&round=${round}`;
+		});
+
+		function isAnyRadioButtonSelected(groupName) {
+			const radios = document.getElementsByName(groupName);
+			for (let radio of radios) {
+				if (radio.checked) {
+					return true; // 只要有一个被选中就返回 true
+				}
+			}
+			return false; // 都没被选中则返回 false
+		}
+
+		const done = document.querySelector('#done');
+		done.addEventListener("click", () => {
+
+			localStorage.removeItem('advices');
+
+			const oneIsSelected = isAnyRadioButtonSelected('RadioGroup1');
+			const twoIsSelected = isAnyRadioButtonSelected('RadioGroup2');
+			const threeIsSelected = isAnyRadioButtonSelected('RadioGroup3');
+			const fourIsSelected = isAnyRadioButtonSelected('RadioGroup4');
+
+			if (oneIsSelected && twoIsSelected && threeIsSelected && fourIsSelected) {
+
+			
+				const confirmation = confirm("提交後不能再修改 \n 確定要提交嗎？");
+				
+				if (confirmation) {
+					//刪除GraupTableData
+					localStorage.removeItem('GraupTableData');
+
+					let globalAdvices = [];
+
+					const one = document.getElementsByName('RadioGroup1');
+					const two = document.getElementsByName('RadioGroup2');
+					const third = document.getElementsByName('RadioGroup3');
+					const four = document.getElementsByName('RadioGroup4');
+
+					for (let radio of one) {
+						if (radio.checked) {
+							globalAdvices.push(radio.value);
+						}
+					}
+
+					for (let radio of two) {
+						if (radio.checked) {
+							globalAdvices.push(radio.value);
+						}
+					}
+
+					for (let radio of third) {
+						if (radio.checked) {
+							globalAdvices.push(radio.value);
+						}
+					}
+
+					for (let radio of four) {
+						if (radio.checked) {
+							globalAdvices.push(radio.value);
+						}
+					}
+
+					const area1 = document.querySelector("#textarea3_1");
+					const area2 = document.querySelector("#textarea3_2");
+					const area3 = document.querySelector("#textarea3_3");
+					const area4 = document.querySelector("#textarea3_4");
+					const area5 = document.querySelector("#textarea3_5");
+					globalAdvices.push(area1.value);
+					globalAdvices.push(area2.value);
+					globalAdvices.push(area3.value);
+					globalAdvices.push(area4.value);
+					globalAdvices.push(area5.value);
+
+
+					let rated = [];
+
+					onAuthStateChanged(auth, async currentUser => {
+						if (currentUser) {
+							console.log(currentUser.uid);
+							if (user.rated) {
+								user.rated.push(currentUser.uid);
+								rated = user.rated;
+							} else {
+								rated.push(currentUser.uid);
+							}
+						}
+
+						if (user.globalAdvices) {
+							updateDoc(doc(db, "users", userId, round, userId), {
+								globalAdvices: user.globalAdvices.concat(globalAdvices),
+								rated: rated
+							}).then(() => {
+								// jump
+								window.location.href = `author_page.html?round=${round}`;
+							});
+						} else {
+							updateDoc(doc(db, "users", userId, round, userId), {
+								globalAdvices: globalAdvices,
+								rated: rated
+							}).then(() => {
+								// jump
+								window.location.href = `author_page.html?round=${round}`;
+							});
+						}
+
+					});
+				}else{
+					window.close();
+				}
+			}else{
+				alert("請在提交前為每個類別選擇評分。");
+			}
+
+		});
+
+
+	</script>
+
+</body>
+
+</html>

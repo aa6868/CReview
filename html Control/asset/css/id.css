@@ -1,0 +1,51 @@
+body {
+    background-color: rgb(216, 218, 240);
+    font-family: Arial, sans-serif;
+ }
+
+ h1 {
+    margin-top: 0;
+    text-align: center;
+ }
+
+form {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.5);
+    margin: 50px auto;
+    max-width: 450px;
+    padding: 30px;
+}
+
+button {
+    border-radius: 5px;
+    font-size: 16px;
+    padding: 15px;
+    width: 75%;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+
+}
+
+button:hover{
+    background-color: #c3c7f3;
+}
+
+
+.button-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+.container {
+display: flex;
+align-items: center; /* 可选：垂直居中对齐 */
+justify-content: center;
+}
+
+.cbtn{
+padding: 5px;
+border-radius: 15px;
+font-size: 15px;
+width: 20%;     
+}
+

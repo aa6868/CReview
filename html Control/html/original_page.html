@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>original_page</title>
+  <link type="text/css" href="../asset/css/second_rater.css" rel="stylesheet">
+  <link type="text/css" href="../asset/css/textarea.css" rel="stylesheet" />
+</head>
+<div align="center">
+    <label>
+      <h3>文章查看</h3>
+    </label>
+    <button id="imageButton" onclick="toggleImage()">圖片</button><br>
+    <img id="nm" height="auto" width="300px"><br>
+    <script>
+      function toggleImage() {
+        var img = document.getElementById("nm");
+        if (img.style.display === "none") {
+          img.style.display = "block";
+        } else {
+          img.style.display = "none";
+        }
+      }
+    </script>
+
+    <table width="800" height="500" border="1">
+      <tbody>
+        <tr>
+          <td valign="top" width="500" height="470" rowspan="3">
+            <form id="form1" name="form1" method="post">
+              <label><strong>➤寫作者文章</strong></label>
+              <textarea disabled class="content" name="textarea" id="textarea"
+                style="height:650px;width:800px;"></textarea>
+            </form>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <div style="position:relative;top:10px;">
+      <button id="done">上一頁</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js'
+    import { collection, getDoc, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js';
+    import { db, auth } from '../js/DB.js';
+
+    async function getUser(db, userId) {
+            const userSnapshot =doc(collection(db, 'users', userId, round), userId);
+            const documentSnapshot = await getDoc(userSnapshot);
+            if(documentSnapshot.exists()) {
+              return documentSnapshot.data();
+            }
+            return null;
+      }
+
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const round = urlParams.get('round');
+
+
+    onAuthStateChanged(auth, async currentUser => {
+    if (currentUser) {
+        const userId = currentUser.email === "admin@gmail.com" ? urlParams.get('user') : currentUser.uid;
+        const user = await getUser(db, userId);
+
+        // update content
+        const content = document.querySelector('#textarea');
+        content.value = user.text;
+
+        // 设置“圖片”按钮的 disabled 属性
+        const imageButton = document.querySelector('#imageButton');
+        imageButton.disabled = round === 'Round0';
+
+        if (round !== 'Round0') {
+            const img = document.querySelector('#nm');
+            img.src = user.photo;
+            console.log(img.src);
+        }
+
+        // done
+        const done = document.querySelector('#done');
+        done.addEventListener('click', () => {    
+          if (round === 'Round0' && currentUser.email === "admin@gmail.com") {
+            window.location.href =`id_page.html?round=${round}`;
+          } else if(round === 'Round0'){
+            window.location.href = `round.html`;
+          }else{
+            window.location.href = `author_page.html?round=${round}`;
+          }        
+        });
+    }
+});
+
+    
+  </script>
+</body>
+
+</html>

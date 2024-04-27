@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="utf-8">
+   <title>執行身份</title>
+   <link type="text/css" href="../asset/css/id.css" rel="stylesheet">
+
+</head>
+
+<body>
+   <form>
+      <div class="container">
+         <h1>執行身份</h1>
+         <button type="button" id="button" class="cbtn">上一步</button>
+      </div>
+
+      <div class="button-container">
+         <!-- <button type="button" id="button1">審評者</button>
+         <button type="button" id="button2">寫作者</button> -->
+      </div>
+
+      <div class="all"></div>
+   </form>
+
+   <script type="module">
+      import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js'
+      import { collection, getDocs, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js';
+      import { db, auth } from '../js/DB.js';
+
+      async function getUsers(db) {
+         const citiesCol = collection(db, 'users');
+         const citySnapshot = await getDocs(citiesCol);
+         const cityList = citySnapshot.docs.map(doc => {
+            return doc;
+         });
+         return cityList;
+      }
+
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const round = urlParams.get('round');
+      
+      const button = document.getElementById("button");
+      button.addEventListener("click", () => {
+         window.location.href = 'round.html';
+      });
+      
+      //  //抓取當前ID
+      //  function getCurrentUserIdx(users, currentUser) {
+      //    let idx = -1;
+      //    users.forEach((user, index) => {
+
+      //       if (user.id === currentUser.uid) {
+      //          idx = index;
+      //          localStorage.setItem('uid', currentUser.uid);
+      //       }
+      //    })
+      //    return idx;
+      // }
+
+      onAuthStateChanged(auth, async currentUser => {
+         if (currentUser) {
+            if (currentUser.email === "admin@gmail.com") { // teacher
+               const users = await getUsers(db);
+               const all = document.querySelector('.all');
+               users.forEach(user => {
+                  const btn = document.createElement('button');
+                  btn.style.width = '100%';
+                  btn.textContent = user.data().email;
+                  btn.addEventListener('click', (e) => {
+                     e.preventDefault();
+                     if(round === 'Round0'){
+                       window.location.href = 'original_page.html' + `?user=${user.id}&round=${round}`;
+                     }else{
+                       window.location.href = 'curfinally_page.html' + `?user=${user.id}&round=${round}`;
+                     }
+                  });
+                  all.appendChild(btn);
+               });
+            } else { // student
+               const button_container = document.querySelector('.button-container');
+               const button1 = document.createElement("button");
+               const button2 = document.createElement("button");
+               
+               button1.textContent = "審評者";
+               button2.textContent = "寫作者";
+               // button2.disabled = true;
+                             
+               button_container.appendChild(button1);
+               button_container.appendChild(button2);
+                             
+               // if (currentUser) {
+               //    const users = await getUsers(db);
+               //    const currentUserIdx = getCurrentUserIdx(users, currentUser);
+               //    if (users[currentUserIdx].data().rated && users[currentUserIdx].data().rated.length >= 2) {
+               //       button2.disabled = false;
+               //    }
+               // }
+
+               button1.addEventListener("click", (e) => {
+                  e.preventDefault();
+                  window.location.href = `review_page.html?round=${round}`;
+               });
+
+               button2.addEventListener("click", (e) => {
+                  e.preventDefault();
+                  window.location.href = `author_page.html?round=${round}`;                
+               });
+            }
+         }
+      });
+
+
+
+
+
+
+   </script>
+</body>
+
+
+</html>
