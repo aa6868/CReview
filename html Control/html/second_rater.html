@@ -400,6 +400,12 @@
 					const area3 = document.querySelector("#textarea3_3");
 					const area4 = document.querySelector("#textarea3_4");
 					const area5 = document.querySelector("#textarea3_5");
+
+					if (area1.value.trim() === '' || area2.value.trim() === '' || area3.value.trim() === '' || area4.value.trim() === '' || area5.value.trim() === '') {
+						alert("請在提交前填寫所有評論內容。");
+						return; // 停止執行後續代碼
+					}
+					
 					globalAdvices.push(area1.value);
 					globalAdvices.push(area2.value);
 					globalAdvices.push(area3.value);
