@@ -197,6 +197,11 @@
         const answer = document.querySelector("#comment");
         const selectedErrors = Array.from(errors).filter(error => error.checked);
 
+	if (row.value.trim() === '' || answer.value.trim() === ''|| selectedErrors.length === 0) {
+          alert("錯誤行、錯誤類別和評論不能為空。");
+          return; // 停止執行後續代碼
+        }
+
         // add to advices
         const selectedErrorValues = selectedErrors.map(error => {
           return error.value;
